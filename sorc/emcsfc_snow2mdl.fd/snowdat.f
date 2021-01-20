@@ -906,7 +906,7 @@
 !          
 !$$$
 
- use gdswzd_mod
+ use ip_mod
 
  use program_setup, only    : climo_qc_file,  &
                               grib_year, grib_month, grib_day, &

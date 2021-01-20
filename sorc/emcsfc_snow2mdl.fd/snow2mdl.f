@@ -174,7 +174,7 @@
 !
 !$$$
 
- use gdswzd_mod
+ use ip_mod
 
  implicit none
 
@@ -183,7 +183,7 @@
  integer, allocatable      :: idum(:,:)
  integer                   :: int_opt, ipopt(20)
  integer                   :: kgds_mdl_tmp(200)
- integer                   :: no, ibo, iret, nret
+ integer                   :: no, ibo(1), iret, nret
 
  logical*1, allocatable    :: bitmap_mdl(:)
 
@@ -274,9 +274,9 @@
    bitmap_mdl=.false.  ! if interpolation routine can't find data
                        ! at a point, this flag is false.
 
-   call ipolates(int_opt, ipopt, kgds_nesdis, kgds_mdl_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_nesdis, kgds_mdl_tmp,   &
                 (inesdis*jnesdis), ijmdl,               &
-                 1, 1, bitmap_nesdis, snow_cvr_nesdis,  &
+                 1, [1], bitmap_nesdis, snow_cvr_nesdis,  &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_cvr_mdl_1d, iret)
 
@@ -302,7 +302,7 @@
        if (lats_mdl(ij) <= lat_threshold) then
          snow_cvr_mdl_1d(ij) = 0.0
        else 
-         call gdswzd(kgds_nesdis,-1,1,undefined_value,gridi,gridj, &
+         call gdswzd_grib1(kgds_nesdis,-1,1,undefined_value,gridi,gridj, &
                      lons_mdl(ij),lats_mdl(ij),nret) 
          if (nret /= 1) then
            print*,"- WARNING: MODEL POINT OUTSIDE NESDIS/IMS GRID: ", ipts_mdl(ij), jpts_mdl(ij)
@@ -361,9 +361,9 @@
    allocate (bitmap_mdl(ijmdl))
    bitmap_mdl = .false.
 
-   call ipolates(int_opt, ipopt, kgds_afwa_global, kgds_mdl_tmp,    &
+   call ipolates_grib1(int_opt, ipopt, kgds_afwa_global, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_global, snow_dep_afwa_global, &
+                 1, [1], bitmap_afwa_global, snow_dep_afwa_global, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
@@ -432,9 +432,9 @@
    allocate (bitmap_mdl(ijmdl))
    bitmap_mdl = .false.
 
-   call ipolates(int_opt, ipopt, kgds_afwa_nh, kgds_mdl_tmp,    &
+   call ipolates_grib1(int_opt, ipopt, kgds_afwa_nh, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_nh, snow_dep_afwa_nh, &
+                 1, [1], bitmap_afwa_nh, snow_dep_afwa_nh, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
@@ -571,9 +571,9 @@
    bitmap_mdl=.false.  ! if interpolation routine can't find data
                        ! at a point, this flag is false.
 
-   call ipolates(int_opt, ipopt, kgds_autosnow, kgds_mdl_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_autosnow, kgds_mdl_tmp,   &
                 (iautosnow*jautosnow), ijmdl,               &
-                 1, 1, bitmap_autosnow, snow_cvr_autosnow,  &
+                 1, [1], bitmap_autosnow, snow_cvr_autosnow,  &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_cvr_mdl_1d, iret)
 
@@ -642,9 +642,9 @@
    allocate (bitmap_mdl(ijmdl))
    bitmap_mdl = .false.
 
-   call ipolates(int_opt, ipopt, kgds_afwa_sh, kgds_mdl_tmp,    &
+   call ipolates_grib1(int_opt, ipopt, kgds_afwa_sh, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_sh, snow_dep_afwa_sh, &
+                 1, [1], bitmap_afwa_sh, snow_dep_afwa_sh, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 

@@ -3147,9 +3147,10 @@ C ATTRIBUTES:
 C   LANGUAGE: FORTRAN
 C
 CC$$$
+      use ip_mod
       REAL G1(IM1,JM1,KM),G2(IM2,JM2,KM)
       LOGICAL*1 L1(IM1,JM1,KM),L2(IM2,JM2,KM)
-      REAL, intent(in) :: RLAT(IM2,JM2),RLON(IM2,JM2)
+      REAL, intent(inout) :: RLAT(IM2,JM2),RLON(IM2,JM2)
       INTEGER IB1(KM),IB2(KM)
       INTEGER KGDS1(200),KGDS2(200)
       INTEGER IDRTI, IDRTO
@@ -3171,8 +3172,8 @@ C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         KGDS2(3)=JM2
         KGDS2(8)=NINT(-360000./IM2)
         KGDS2(10)=JM2/2
-        CALL IPOLATES(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,L1,G1,
-     &                NO,RLAT,RLON,IB2,L2,G2,IRET)
+        CALL IPOLATES_grib1(IP,IPOPT,KGDS1,KGDS2,IM1*JM1,IM2*JM2,KM,IB1,
+     &       L1,G1,NO,RLAT,RLON,IB2,L2,G2,IRET)
       ELSE
         G2=G1
       ENDIF
@@ -3285,6 +3286,7 @@ C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
      3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
+      use ip_mod
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.
@@ -3493,9 +3495,9 @@ C
       do KWD=1,4
         bitmap_output = .false.
          output_data_land = 0.0
-        call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
+        call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, oa_in(:,:,KWD),  
+     &          1, [1], bitmap_input, oa_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
@@ -3565,9 +3567,9 @@ C
       do KWD=1,4
         bitmap_output = .false.
         output_data_land = 0.0
-        call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
+        call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, ol_in(:,:,KWD),  
+     &          1, [1], bitmap_input, ol_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)

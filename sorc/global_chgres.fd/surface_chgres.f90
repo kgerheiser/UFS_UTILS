@@ -463,7 +463,8 @@
  use soil_utils, only        : rescale_soilm, adjust_soilt_for_orog, &
                                calc_liq_soilm, calc_albedo
  
- use gdswzd_mod
+ use ip_mod
+ 
 
  implicit none
 
@@ -813,9 +814,9 @@
      allocate(ibo(1))
      allocate(input_dat(imdl_input,jmdl_input,1))
      input_dat(:,:,1)=float(input%sea_ice_flag)
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                 (imdl_input*jmdl_input), count_nonland_output,    &
-                 1, 1, bitmap_nonland_input, input_dat,  &
+                 1, [1], bitmap_nonland_input, input_dat,  &
                  no, lats_nonland_output, lons_nonland_output, ibo, &
                  bitmap_nonland_output, output_data_nonland, iret)
      if (iret /= 0) then
@@ -847,9 +848,9 @@
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(1))
      no=count_nonland_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                 (imdl_input*jmdl_input), count_nonland_output,       &
-                 1, 1, bitmap_nonland_input, input%sea_ice_fract,  &
+                 1, [1], bitmap_nonland_input, input%sea_ice_fract,  &
                  no, lats_nonland_output, lons_nonland_output, ibo,  &
                  bitmap_nonland_output, output_data_nonland, iret)
      if (iret /= 0) then
@@ -965,9 +966,9 @@
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(1))
      no=count_sea_ice_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_sea_ice_output,               &
-                   1, 1, bitmap_sea_ice_input, input%sea_ice_depth,  &
+                   1, [1], bitmap_sea_ice_input, input%sea_ice_depth,  &
                    no, lats_sea_ice_output, lons_sea_ice_output,  &
                    ibo, bitmap_sea_ice_output,     &
                    output_data_sea_ice, iret)
@@ -1124,9 +1125,9 @@
    kgds_output_tmp(1) = kgdso1
    allocate(ibo(1))
    no=count_land_output
-   call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_land_output,               &
-               1, 1, bitmap_land_input, input%skin_temp,  &
+               1, [1], bitmap_land_input, input%skin_temp,  &
                no, lats_land_output, lons_land_output, ibo,  &
                bitmap_land_output, output_data_land, iret)
    if (iret /= 0) then
@@ -1153,9 +1154,9 @@
    kgds_output_tmp(1) = kgdso1
    allocate(ibo(1))
    no=count_nonland_output
-   call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+   call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_nonland_output,               &
-               1, 1, bitmap_nonland_input, input%skin_temp,  &
+               1, [1], bitmap_nonland_input, input%skin_temp,  &
                no, lats_nonland_output, lons_nonland_output, ibo,  &
                bitmap_nonland_output, output_data_nonland, iret)
    if (iret /= 0) then
@@ -1277,7 +1278,7 @@
  allocate(ibo(nsoil_input))
  allocate(ibi(nsoil_input))
  ibi=1
- call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+ call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                (imdl_input*jmdl_input), count_sea_ice_output,               &
                 nsoil_input, ibi, bitmap_sea_ice_input2, input_dat,  &
                 no, lats_sea_ice_output, lons_sea_ice_output, ibo,  &
@@ -1336,9 +1337,9 @@
    kgds_output_tmp(1) = kgdso1
    no=count_land_output
    allocate(ibo(1))
-   call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+   call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_land_output,               &
-               1, 1, bitmap_land_input, input%snow_liq_equiv,  &
+               1, [1], bitmap_land_input, input%snow_liq_equiv,  &
                no, lats_land_output, lons_land_output, ibo, bitmap_land_output,     &
                output_data_land, iret)
    if (iret /= 0) then
@@ -1374,9 +1375,9 @@
  kgds_output_tmp(1) = kgdso1
  no=count_sea_ice_output
  allocate(ibo(1))
- call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+ call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
               (imdl_input*jmdl_input), count_sea_ice_output,               &
-               1, 1, bitmap_sea_ice_input, input%snow_liq_equiv,  &
+               1, [1], bitmap_sea_ice_input, input%snow_liq_equiv,  &
                no, lats_sea_ice_output, lons_sea_ice_output, ibo,  &
                bitmap_sea_ice_output, output_data_sea_ice, iret)
  if (iret /= 0) then
@@ -1432,9 +1433,9 @@
        kgds_output_tmp(1) = kgdso1
        allocate(ibo(1))
        no=count_land_output
-       call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+       call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,               &
-                   1, 1, bitmap_land_input, input%snow_depth,  &
+                   1, [1], bitmap_land_input, input%snow_depth,  &
                    no, lats_land_output, lons_land_output, ibo, bitmap_land_output,     &
                    output_data_land, iret)
        if (iret /= 0) then
@@ -1474,9 +1475,9 @@
        kgds_output_tmp(1) = kgdso1
        no=count_sea_ice_output
        allocate(ibo(1))
-       call ipolates(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
+       call ipolates_grib1(int_opt_snow, ipopt_snow, kgds_input, kgds_output_tmp,   &
                     (imdl_input*jmdl_input), count_sea_ice_output,               &
-                     1, 1, bitmap_sea_ice_input, input%snow_depth,  &
+                     1, [1], bitmap_sea_ice_input, input%snow_depth,  &
                      no, lats_sea_ice_output, lons_sea_ice_output, ibo,  &
                      bitmap_sea_ice_output, output_data_sea_ice, iret)
        if (iret /= 0) then
@@ -1634,9 +1635,9 @@
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(1))
      no=count_land_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                 (imdl_input*jmdl_input), count_land_output,               &
-                 1, 1, bitmap_land_input, input%greenfrc,  &
+                 1, [1], bitmap_land_input, input%greenfrc,  &
                  no, lats_land_output, lons_land_output, ibo,  &
                  bitmap_land_output, output_data_land, iret)
      if (iret /= 0) then
@@ -1713,7 +1714,7 @@
        kgds_output_tmp(1) = kgdso1
        allocate(ibo(2))
        no=count_land_output
-       call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+       call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,               &
                    2, (/1,1/), bitmap_land_input2, input_dat,  &
                    no, lats_land_output, lons_land_output, ibo,  &
@@ -1870,7 +1871,7 @@
      kgds_output_tmp(1) = kgdso1
      allocate(ibo(6))
      no=count_land_output
-     call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+     call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,          &
                    6, (/1,1,1,1,1,1/), bitmap_land_input2, input_dat,  &
                    no, lats_land_output, lons_land_output, ibo,  &
@@ -1974,9 +1975,9 @@
        kgds_output_tmp(1) = kgdso1
        no=count_land_output
        allocate(ibo(1))
-       call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+       call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,     &
-                   1, 1, bitmap_land_input, input%snow_free_albedo,  &
+                   1, [1], bitmap_land_input, input%snow_free_albedo,  &
                    no, lats_land_output, lons_land_output, ibo,   &
                    bitmap_land_output, output_data_land, iret)
        if (iret /= 0) then
@@ -2019,9 +2020,9 @@
        kgds_output_tmp(1) = kgdso1
        no=count_land_output
        allocate(ibo(1))
-       call ipolates(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
+       call ipolates_grib1(int_opt, ipopt, kgds_input, kgds_output_tmp,   &
                   (imdl_input*jmdl_input), count_land_output,               &
-                   1, 1, bitmap_land_input, input%mxsnow_alb,  &
+                   1, [1], bitmap_land_input, input%mxsnow_alb,  &
                    no, lats_land_output, lons_land_output, ibo, bitmap_land_output,     &
                    output_data_land, iret)
        if (iret /= 0) then
