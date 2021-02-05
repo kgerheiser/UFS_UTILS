@@ -72,6 +72,11 @@ endif()
 
 add_subdirectory(sorc)
 
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(reg_tests)
+endif()
+
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
   find_package(Doxygen REQUIRED)
